@@ -2,7 +2,8 @@
 
 ## Configs
 ### sysdir 
-Stata各相关文件夹路径  
+显示Stata各相关文件夹路径，包括`STATA` `BASE` `SITE` `PLUS` `PERSONAL` 和 `OLDPLACE`。  
+使用 `sysdir set folder_name folder_path`来指定相关文件夹的路径 
 ### memory 
 显示目前存储空间  
 ### query memory 
@@ -15,6 +16,24 @@ Stata各相关文件夹路径
 设定最大变量数（最小设定为2048）  
 ### help limits 
 显示Stata的各种极限
+
+## SSC相关
+### ssc new
+显示 SSC 最近新增或更新的软件包摘要。
+
+### ssc hot
+显示 SSC 最受欢迎的软件包摘要。
+
+### ssc describe pkgname
+显示 SSC 中名为`pkgname`的软件包的介绍。
+
+### ssc install pkgname [, all replace]
+下载 SSC 中名为`pkgname`的软件包
+- `all` 指定除了正在安装的程序和帮助文件之外，还将与包关联的任何辅助文件下载到当前目录。辅助文件是不以 .ado 或 .sthlp 结尾的文件，通常包含数据集或新命令的使用示例。
+- `replace` 允许覆盖。否则如果已存在同名软件包，则会拒绝下载。  
+
+### ssc uninstall pkgname
+卸载名为`pkgname`的软件包
 
 ## 数据的输入与输出
 ### set obs n 
@@ -169,43 +188,6 @@ Stata各相关文件夹路径
 - `longstub`指定表的左单元格变宽，以便除了 `by(varname)` 的类别之外，它还可以包含统计信息或变量的名称。如果未指定 `by(varname)`，则忽略 `longstub`。如果指定`varwidth()`，则自动启用`longstub`
 - `save` 指定在 `r()` 中返回汇总统计信息。总体（无条件）统计数据在矩阵 `r(StatTotal)` 中返回（行是统计数据，列是变量）。条件统计数据在矩阵 `r(Stat1)`, `r(Stat2)`, ...中返回，并在宏 `r(name1)`, `r(name2)`, ...中返回相应变量的名称。
 
-### tab1 varlist [if] [in] [weight] [, subpop(), missing, nofreq, nolabel, plot, sort]
-对`varlist`中的每个变量，以每个不同的值为类别，生成单个分类变量的汇总表格。显示频数(Freq.)、百分比(Percent)和累计百分比(Cum.)
-- `subpop()`不显示指定变量中频数为0的类别
-- `missing` 将变量的缺失值像任何其他值一样处理。
-- `nofreq`禁用频数统计。不显示频数的统计。
-- `nolabel`禁用标签显示。对于存在指定值标签映射集的变量，不以值标签显示，而是以真实数值显示。
-- `plot`对频数统计结果附带星点图。注意将取消百分比和累计百分比统计量的显示。
-- `sort`将表的呈现顺序按频数大小降序排列
-
-### tab2 varlist [if] [in] [weight] [,stat_options missing, nofreq, nolabel, firstonly]
-对`varlist`中的每个变量，两两组合，生成两个分类变量的列联表分析。显示频数(Freq.)。
-
-- `stat_options`:
-
-| options  |     Definition     |
-|:--------:|:------------------:|
-|   chi2   |    皮尔逊卡方统计量 χ2     |
-| exact(#) |     费舍精确检验统计量      |
-|  gamma   |   古德曼-克里斯卡尔 伽马值    |
-|  lrchi2   |      卡方似然比统计量      |
-|   taub   | Kendall's tau-b统计量 |
-|    V     |    Cramer V统计量     |
-|  cchi2   |  在每个单元格报告皮尔逊卡方统计量  |
-| clrchi2 | 在每个单元格报告卡方似然统计量 |
-| cell | 在每个单元格报告单元格在全部样本中的百分比 |
-| expected | 在每个单元格报告单元格的期望频数 |
-
-- `missing` 将变量的缺失值像任何其他值一样处理。
-- `nofreq`禁用频数统计。不显示频数的统计。
-- `nolabel`禁用标签显示。对于存在指定值标签映射集的变量，不以值标签显示，而是以真实数值显示。
-- `firstonly`仅显示包含`varlist`中第一项变量的双向表。
-
-### tabulate varname1 [varname2] [options]
-指定`varname1`时，表现即为`tab1`；同时指定`varname1`和`varname2`时，表现即为`tab2`。
-
-### table
-
 
 > 样式参考
 > 
@@ -273,7 +255,43 @@ Stata各相关文件夹路径
 > ```
 
 
+### tab1 varlist [if] [in] [weight] [, subpop(), missing, nofreq, nolabel, plot, sort]
+对`varlist`中的每个变量，以每个不同的值为类别，生成单个分类变量的汇总表格。显示频数(Freq.)、百分比(Percent)和累计百分比(Cum.)
+- `subpop()`不显示指定变量中频数为0的类别
+- `missing` 将变量的缺失值像任何其他值一样处理。
+- `nofreq`禁用频数统计。不显示频数的统计。
+- `nolabel`禁用标签显示。对于存在指定值标签映射集的变量，不以值标签显示，而是以真实数值显示。
+- `plot`对频数统计结果附带星点图。注意将取消百分比和累计百分比统计量的显示。
+- `sort`将表的呈现顺序按频数大小降序排列
 
+### tab2 varlist [if] [in] [weight] [,stat_options missing, nofreq, nolabel, firstonly]
+对`varlist`中的每个变量，两两组合，生成两个分类变量的列联表分析。显示频数(Freq.)。
+
+- `stat_options`:
+
+| options  |     Definition     |
+|:--------:|:------------------:|
+|   chi2   |    皮尔逊卡方统计量 χ2     |
+| exact(#) |     费舍精确检验统计量      |
+|  gamma   |   古德曼-克里斯卡尔 伽马值    |
+|  lrchi2   |      卡方似然比统计量      |
+|   taub   | Kendall's tau-b统计量 |
+|    V     |    Cramer V统计量     |
+|  cchi2   |  在每个单元格报告皮尔逊卡方统计量  |
+| clrchi2 | 在每个单元格报告卡方似然统计量 |
+| cell | 在每个单元格报告单元格在全部样本中的百分比 |
+| expected | 在每个单元格报告单元格的期望频数 |
+
+- `missing` 将变量的缺失值像任何其他值一样处理。
+- `nofreq`禁用频数统计。不显示频数的统计。
+- `nolabel`禁用标签显示。对于存在指定值标签映射集的变量，不以值标签显示，而是以真实数值显示。
+- `firstonly`仅显示包含`varlist`中第一项变量的双向表。
+
+### tabulate varname1 [varname2] [options]
+指定`varname1`时，表现即为`tab1`；同时指定`varname1`和`varname2`时，表现即为`tab2`。
+
+### table (rowspec) (colspec) [(tabspec)] [if] [in] [weight] [, options]
+多维列联表分析。
 
 ### ci [means/variances/proportions] [varlist] [if] [in] [weight] [, options]
 >待写
@@ -342,6 +360,7 @@ Stata各相关文件夹路径
 
 ### recast type varlist [, force]
 将变量名为`old_varlist`的各变量转换为指定数据类型`type`，原地操作。  
+注意该方法似乎不能用于字符串与数值数据之间的转换。  
 - `force`强制转换。适用于将`double`类型转换为`float`类型,可能造成舍入误差及不能转换带来的缺失值。
 
 ### encode old_varname [if] [in], generate(new_varname) [label(lblname) noextend]
@@ -481,5 +500,148 @@ Stata各相关文件夹路径
 特别地，可以指定`varlist`为`_all`以指定全部变量。  
 - `mv()`指定缺失值解码规则。`mv(numlist)`指定所有`numlist`内的数值均被替换为缺失值`.`；`mv(numlist=mvc)`指定所有`numlist`内的数值均被替换为编码为`mvc`的缺失值；对于多种编码可以在括号内使用` \ `进行分隔以批量指定。
 
-### 
+## 
 
+## OLS回归
+
+### regress dep_varname [indep_varlist] [if] [in] [weight] [, noconstant vce(vcetype) level(#)] 
+进行回归。指定`reg`后第一个变量名为因变量`dep_varname`，其后各变量名均为自变量`indep_varlist`。当只指定`dep_varname`时，相当于只做常数项回归。  
+
+```
+.  regress mpg weight foreign
+
+      Source |       SS           df       MS      Number of obs   =        74
+-------------+----------------------------------   F(2, 71)        =     69.75
+       Model |   1619.2877         2  809.643849   Prob > F        =    0.0000
+    Residual |  824.171761        71   11.608053   R-squared       =    0.6627
+-------------+----------------------------------   Adj R-squared   =    0.6532
+       Total |  2443.45946        73  33.4720474   Root MSE        =    3.4071
+
+------------------------------------------------------------------------------
+         mpg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      weight |  -.0065879   .0006371   -10.34   0.000    -.0078583   -.0053175
+     foreign |  -1.650029   1.075994    -1.53   0.130      -3.7955    .4954422
+       _cons |    41.6797   2.165547    19.25   0.000     37.36172    45.99768
+------------------------------------------------------------------------------
+```
+
+生成各种汇总统计数据以及回归系数表。   
+
+在左上角，回归报告了方差分析 (ANOVA) 表。  
+列标题 `SS`、`df` 和 `MS` 分别代表`平方和`、`自由度`和`均方`（即平方和除以自由度）。`模型平方和`相当于`SSR=∑(y_hat - E(y))^2`，`残差平方和`相当于`SSE=∑(y-y_hat)^2`.  
+> 在此示例中，总平方和为 2,443.5：模型占了 1,619.3，还有 824.2 未解释。由于回归包含一个常数，因此总和反映了去除均值后的总和，模型的平方和也是如此。该表还显示，总共有 73 个自由度（计算为 74 个观测值减去平均去除的 1 个），其中 2 个被模型消耗，剩下 71 个为残差。
+
+方差分析表的右侧显示了其他汇总统计数据。
+回归使用总观测值（样本数）为74。
+与 ANOVA 表关联的 F 统计量为 69.75。该统计量有 2 个分子自由度和 71 个分母自由度。  
+F 统计量检验除常数之外的所有系数均为零的假设。观察到较大或更大的 F 统计量的概率报告为 0.0000，这是 Stata 指示小于 0.00005 的数字的方式。  
+回归的拟合优度 `R^2` 为 0.6627，根据自由度 (R^2 a) 调整的 R^2 为 0.6532。  
+均方根误差（标记为 Root MSE）为 3.4071。它是方差分析表中报告的残差均方误差的平方根。
+
+最下方的表格显示了每个因变量相应的的回归系数、标准误、t统计量、双边显著性检验、95%水平的置信区间。
+
+#### Args
+- `vce()`指定报告的标准误的类型。其中包括从渐近理论 (ols) 派生的类型、对某些类型的错误指定具有鲁棒性（鲁棒性）、允许组内相关性（簇 clustvarlist）以及使用 bootstrap 或 jackknife 方法的类型
+
+|VCE Type|                                                                                                     Description                                                                                                     |
+|:---:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| `vce(ols)` |                                                                                            使用标准方差估计器,进行普通最小二乘回归。默认使用该项。                                                                                             |
+| `vce(cluster clustvarlist)` |指定标准误由`clustvarlist`中的一个或多个变量定义的组内存在组内相关性，从而放宽了观察结果独立的通常要求。例如，vce(cluster clustvar1) 产生集群稳健标准误差，允许观察结果在 `clustvar1` 定义的组之间独立，但在组内不一定独立。您还可以输入 vce(cluster clustvar1 clustvar2 . . . clusterp) 来解释由 p 变量形成的组内的相关性（多路聚类） |
+| `vce(hc2 [ clustvar ][ , dfadjust ])`||
+| `vce(hc3)`||
+
+- `level()`指定置信度`#`。默认为95。
+- `beta`要求报告标准化贝塔系数而不是置信区间。贝塔系数是通过首先将所有变量标准化为均值 0 和标准差 1 获得的回归系数。
+
+#### Results
+|  Name   |  Type  |       Description       |
+|:-------:|:------:|:-----------------------:|
+| e(mss)  | scalar |          模型平方和          |
+| e(rss)  | scalar |          残差平方和          |
+| e(df_m) | scalar |          模型自由度          |
+| e(df_r) | scalar |          残差自由度          |
+|  e(N)   | scalar |          总样本数           |
+|  e(F)   | scalar |          F统计量           |
+|  e(r2)  | scalar |          拟合优度           |
+| e(r2_a) | scalar |         调整拟合优度          |
+| e(rmse) | scalar |    均方根误差（残差均方误差的平方根）    |
+|  e(ll)  | scalar |                         |
+| e(ll_0) | scalar |                         |
+| e(rank) | scalar |                         |
+|  e(b)   | matrix |  各变量系数与常数项`_cons`的估计值   |
+|  e(V)   | matrix | 各变量系数与常数项`_cons`的两两的协方差 |
+| e(sample) | function | 函数，当观测值在回归的样本中时返回`true`，常用于`if`条件句 |
+可使用 `ereturn list` 调出所有`e()`结果概览,  
+使用`display e(...)`显示`scalar`类型的结果。  
+使用`matrix e(...)`显示`matrix`类型的结果。  
+
+### estimates store est_name 
+将当前估计结果存储到内存，标识符为`est_name`。  
+会自动创建`f"_est_{est_name}"样式的变量以记录该`est_name`估计模型所使用的样本（相当于`e(sample)`）。
+
+### estimates restore est_name 
+读取标识符为`est_name`的估计结果，作为当前估计模型。
+
+### estimate save filename
+将当前估计结果保存为文件，命名为`filename`。
+
+### estimate use filename
+读取文件名为`filename`的估计结果，作为当前估计模型。
+
+### predict [type] new_varname [if] [in] [, xb residual stdp score]
+使用内存中已生成的模型进行预测，生成预测结果`new_varname`。   
+可以指定`if`或`in`语句以限定用于预测的样本范围。特别地，可以使用`if e(sample)`以只使用模型计算时所用数据进行生成。
+- `xb` 计算线性预测结果。
+- `residual`计算残差。
+- `stdp` 计算预测结果的标准误。
+- `score` calculate first derivative of the log likelihood with respect to xj β
+
+### esttab [est_names] [using filename] [, options estout_options ]
+外部命令，需要安装`estout`包。  
+对估计结果，生成发布样式的表格。 
+
+`est_names`可以指定一个或多个估计结果，允许使用`*` `?`匹配字符，并允许使用`.`字符代指当前统计结果。不指定`est_names`时默认使用当前估计结果。  
+`fileaname`指定生成结果保存的文件名。可指定文件后缀名为`.smcl` `.txt` `.csv` `.rtf` `.html` `.tex` 和 `.md`，当`options`中未指定保存格式时默认使用文件名中指定的后缀，否则默认为`smcl`。未指定`using filename`时，不保存文件，仅将结果显示在屏幕上。    
+
+#### Labeling Options
+>待施工 
+> 
+`label` 指定使用变量标签代替变量名称（并且使用估计集标题代替估计集名称）。此外，常数项标签打印`Constant`而不是`_cons`。
+`interaction(string)` 指定用作交互术语分隔符的字符串（仅在 Stata 11 或更高版本中相关）。 默认是交互（“#”）。 对于 tex 和 booktabs，默认值
+         是交互（“$\times$”）。
+
+`title(string)` 可用于提供表格的标题。 如果指定，字符串将打印在表的顶部。 请注意，指定标题会导致表格设置为浮动表格
+         LaTeX 模式下的对象（除非指定了 nofloat 选项）。 在这种情况下，您可能需要设置一个标签以供参考。 例如，如果您输入 title(...\label{tab1})，则为“\ref{tab1}”
+         可以在 LaTeX 文档中使用来指向表格。
+
+`mtitles`（不带参数）指定对于每个模型，存储的估计集的标题（或者，如果为空，则为名称）将打印为表标题中的模型标题。 如果 mtitles 是
+         省略，默认是使用因变量的名称或标签作为模型的标题（请参阅 depvar 选项）。 或者，使用 mtitles(list) 指定模型标题列表。
+         如果标题包含空格，请将其括在双引号中，例如 mtitles(“模型 1”“模型 2”).
+
+`nomtitles` 禁止打印模型标题。
+
+`depvars` 将模型的（第一个）因变量的名称（或标签）打印为表标题中的模型标题。 这是默认设置。 指定nodepvars以使用存储的名称
+         估计集作为标题。
+
+`numbers` 在表标题中包含一行，其中包含连续的型号。 这是默认设置。 指定 nonumbers 以禁止打印型号。
+
+`coeflabels(name label [...])` 指定系数的标签。 成对指定名称和标签，如有必要，将标签用双引号引起来，例如 coeflabels(mpg 里程rep78
+         《维修记录》）。
+
+`notes` 在表格末尾打印注释，解释重要性符号和显示的统计数据的类型。 这是默认设置。 指定 nonotes 来抑制注释。
+addnotes(list) 可用于在表格底部添加更多文本行。 包含空格的行必须用双引号括起来，例如 addnotes("第 1 行" "第 2 行").
+
+#### Document Format Options
+|  Option   |     Definition      |                                                                         Remark                                                                          |
+|:---------:|:-------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  `smcl`   |   生成一个 SMCL 格式的表    |                                                            显示在 Stata 结果窗口或 Stata 查看器中。此项为默认                                                             |
+|  `fixed`  |  生成固定格式的 ASCII 表。   |                                                                                                                                                         |
+|   `tab`   | 生成一个制表符分隔的 ASCII 表。 |                                                                                                                                                         |
+|   `csv`   | 生成CSV表。使用`,`作为分隔符。  | 为了防止 Excel 解释表格单元格的内容，他们用双引号括起来，前面加等号（即 `="..."`）。 如果指定 `plain` 选项，则表格单元格将用双引号引起来，且不带前导等号。如果您想保留表格的格式，第一种方法是合适的。 如果您想在 Excel 中使用表的内容进行进一步计算，则适合使用第二种方法。 |
+|  `scsv`   |  生成CSV表。使用`;`作为分隔符。  |                                                               这适用于某些非英语版本的 Excel（例如德语版本）。                                                               |
+|   `rtf`   | 生成富文本格式表以供文字处理器使用。  |                                                                                                                                                         |
+|  `html`   | 生成一个简单的 HTML 格式的表格。 |                                                                                                                                                         |
+|   `tex`   |  生成一个 LaTeX 格式的表格。  |                                                                                                                                                         |
+|`booktabs` |  生成一个 LaTeX 格式的表格   |                                                                与 LaTeX 的 booktabs 包一起使用。                                                                |
+|   `md`    | 生成 Markdown 格式的表格。  |                    Native Markdown 没有对表格的特定支持，但 GitHub Flavored Markdown 和 MultiMarkdown 则支持。 选项 mmd 可以用作md 的同义词（在本例中默认文件后缀为“.mmd”）。                    |
