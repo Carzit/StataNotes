@@ -572,6 +572,7 @@ F 统计量检验除常数之外的所有系数均为零的假设。观察到较
 |  e(b)   | matrix |  各变量系数与常数项`_cons`的估计值   |
 |  e(V)   | matrix | 各变量系数与常数项`_cons`的两两的协方差 |
 | e(sample) | function | 函数，当观测值在回归的样本中时返回`true`，常用于`if`条件句 |
+
 可使用 `ereturn list` 调出所有`e()`结果概览,  
 使用`display e(...)`显示`scalar`类型的结果。  
 使用`matrix e(...)`显示`matrix`类型的结果。  
