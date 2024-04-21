@@ -357,6 +357,10 @@
 | float  | -1.70141173319e+38 | 1.70141173319e+38 |    1e-38     |     4      |
 | double | -8.9884656743e+307 | 8.9884656743e+307 |    1e-323    |     8      |
 |  str#  |         /          |         /         |      /       | 最大长度为#的字符串 |
+> ### 类型与颜色
+> 对于一般颜色默认配置，无标签的数值类型以 **黑色/白色** 显示，打上数值映射标签的以标签显示的数值类型以 **蓝色/蓝色** 显示，字符串类型以 **红色/黄色** 显示。  
+> （前者为白色配置，后者为深色配置）
+
 
 ### recast type varlist [, force]
 将变量名为`old_varlist`的各变量转换为指定数据类型`type`，原地操作。  
@@ -500,12 +504,62 @@
 特别地，可以指定`varlist`为`_all`以指定全部变量。  
 - `mv()`指定缺失值解码规则。`mv(numlist)`指定所有`numlist`内的数值均被替换为缺失值`.`；`mv(numlist=mvc)`指定所有`numlist`内的数值均被替换为编码为`mvc`的缺失值；对于多种编码可以在括号内使用` \ `进行分隔以批量指定。
 
-## 
+## 随机数生成
+|             Exp              |      Name       |                                  Description                                   |
+|:----------------------------:|:---------------:|:------------------------------------------------------------------------------:|
+|          rbeta(a,b)          |    贝塔分布随机变量     |             `a` and `b` are the beta distribution shape parameters             |
+|        rbinomial(n,p)        |    二项分布随机变量     |         `n` is the number of trials and `p` is the success probability         |
+|         rcauchy(a,b)         |    柯西分布随机变量     |            `a` is the location parameter and `b` is the scale parameter            |
+|          rchi2(df )          |    卡方分布随机变量     |                                                                                |
+|       rexponential(b)        |    指数分布随机变量     |                                   scale `b`                                    |
+|         rgamma(a,b)          |    伽马分布随机变量     |        `a` is the gamma shape parameter and `b` is the scale parameter         |
+|   rhypergeometric(N ,K,n)    |    超几何分布随机变量    |                                                                                |
+|       rigaussian(m,a)        |    逆高斯分布随机变量    |                        mean `m` and shape parameter `a`                        |
+|        rlaplace(m,b)         |   拉普拉斯分布随机变量    |                        mean `m` and scale parameter `b`                        |
+|         rlogistic()          |   逻辑斯蒂分布随机变量    |                     mean `0` and standard deviation `π/√3`                     |
+|         rlogistic(s)         |   逻辑斯蒂分布随机变量    |              mean `0`, scale `s`, and standard deviation `sπ/√3`               |
+|        rlogistic(m,s)        |   逻辑斯蒂分布随机变量    |              mean `m`, scale `s`, and standard deviation `sπ/√3`               |
+|       rnbinomial(n,p)        |    负二项分布随机变量    |                                                                                |
+|          rnormal()           |   标准正态分布随机变量    |     normal distribution with a mean of `0` and a standard deviation of `1`     |
+|          rnormal(m)          |    正态分布随机变量     |               `m` is the mean and the standard deviation is `1`                |
+|         rnormal(m,s)         |    正态分布随机变量     |               `m` is the mean and `s` is the standard deviation                |
+|         rpoisson(m)          |    泊松分布随机变量     |                          `m` is the distribution mean                          |
+|            rt(df)            |     t分布随机变量     |                         `df` is the degrees of freedom                          |
+|          runiform()          |    均匀分布随机变量     |                                interval `(0, 1)`                                 |       
+|        runiform(a,b)         |    均匀分布随机变量     |                                interval `(a, b)`                                 |      
+|       runiformint(a,b)       |   整数均匀分布随机变量    |                                interval `[a, b]`                                 |   
+|        rweibull(a,b)         |    韦伯分布随机变量     |                              shape `a` and scale `b`                               |
+|       rweibull(a,b,g)        |    韦伯分布随机变量     |                        shape `a`, scale `b`, and location `g`                        |
+|       rweibullph(a,b)        |  韦伯比例风险分布随机变量   |                              shape `a` and scale `b`                               | 
+|      rweibullph(a,b,g)       |  韦伯比例风险分布随机变量   |                        shape `a`, scale `b`, andlocation `g`                         |
+
+## 矩阵
+### matrix [define] mat_name = matrix expression
+矩阵表达式定义矩阵或矩阵元素的数值。
+
+### matrix [input] mat_name = (#, # \ #, #)
+手动定义矩阵数值。  
+同一行内各元素间使用`,`分隔，换行使用`\`，`#`允许数值或缺失值`.`。
+
+### matrix list mat_name
+显示矩阵的类型、形状、内容。  
+注意，`mat_name`必须为矩阵名称（标识符），不可以为表达式或切片索引。但是单个矩阵元素视为标量，可以使用`diplay`命令打印。
+
+### matrix rownames mat_name row_names
+将矩阵`mat_name`的列名改为`row_names`各列名。
+
+### matrix colnames mat_name col_names
+将矩阵`mat_name`的列名改为`row_names`各列名。
+
+### mat_name[#row,#col]
+矩阵索引。  
+`#row`,`#col`从`1`开始计数。允许使用单个数字`#`、对应行名或列名、切片`[#..#]` `[...#]` `[#...]`。
+矩阵创建时默认行名为`r1`,`r2`,...，默认列名为`c1`,`c2`,...
 
 ## OLS回归
 
 ### regress dep_varname [indep_varlist] [if] [in] [weight] [, noconstant vce(vcetype) level(#)] 
-进行回归。指定`reg`后第一个变量名为因变量`dep_varname`，其后各变量名均为自变量`indep_varlist`。当只指定`dep_varname`时，相当于只做常数项回归。  
+进行回归。指定`regress`命令后第一个变量名为因变量`dep_varname`，其后各变量名均为自变量`indep_varlist`。当只指定`dep_varname`时，相当于只做常数项回归。  
 
 ```
 .  regress mpg weight foreign
@@ -572,10 +626,11 @@ F 统计量检验除常数之外的所有系数均为零的假设。观察到较
 |  e(b)   | matrix |  各变量系数与常数项`_cons`的估计值   |
 |  e(V)   | matrix | 各变量系数与常数项`_cons`的两两的协方差 |
 | e(sample) | function | 函数，当观测值在回归的样本中时返回`true`，常用于`if`条件句 |
-
 可使用 `ereturn list` 调出所有`e()`结果概览,  
 使用`display e(...)`显示`scalar`类型的结果。  
-使用`matrix e(...)`显示`matrix`类型的结果。  
+使用`matrix list e(...)`显示`matrix`类型的结果。  
+
+对于参数矩阵`e(V)`，也可以使用`_b[varname`索引每个变量的对应系数。
 
 ### estimates store est_name 
 将当前估计结果存储到内存，标识符为`est_name`。  
@@ -598,41 +653,68 @@ F 统计量检验除常数之外的所有系数均为零的假设。观察到较
 - `stdp` 计算预测结果的标准误。
 - `score` calculate first derivative of the log likelihood with respect to xj β
 
+## T检验
+### ttest varname==# [if] [in] [, level(#)]
+单一样本t检验，测试`varname`的均值是否为`#`
+- `level()`置信水平。默认为 `level(95)`。
+
+### ttest varname1==varname1 [if] [in] , unpair [unequal level(#)]
+独立样本t检验，测试`varname1`的均值是否等于`varname2`
+- `level()`置信水平。默认为 `level(95)`。
+
+### ttest varname1==varname1 [if] [in] [ level(#)]
+配对样本t检验，测试按顺序配对的每个`varname1 - varname2`元素的均值是否为`0`
+- `level()`置信水平。默认为 `level(95)`。
+
+### ttest varname [if] [in], by(catvar) [unequal level(#)]
+样本分组t检验，测试由`catvar`定义的两个组之间`varname`的均值是否相等。  
+注意`catvar`变量有且只有2种不同值。
+- `unequal`不假定未配对的数据具有相等的方差。
+- `level()`置信水平。默认为 `level(95)`。
+
+## F检验
+### test coef_list
+Wald检验：`coef_list`中各变量在估计中的系数均为0。  
+注意需要内存中已存在最近的一次估计模型。
+
+### test exp=exp[=. . . ]
+可以直接使用`varname`代指系数，也可以使用`_b[varname]`。  
+注意不能使用`e(b)[varname]`，其只记录一个数值，无法进行F检验。  
+注意需要内存中已存在最近的一次估计模型。
+
+### lincom exp [, eform or hr shr irr rrr level(#) display(#)]
+报告`exp = 0`的系数线性组合的点估计、标准误差、t 或 z 统计、p 值和置信区间。  
+可以直接使用`varname`代指系数，也可以使用`_b[varname]`。   
+注意需要内存中已存在最近的一次估计模型。
+
+
+
+## estout
+>注意，外部命令，需要安装`estout`包。  
+> ssc install estout, all replace 
+
 ### esttab [est_names] [using filename] [, options estout_options ]
-外部命令，需要安装`estout`包。  
 对估计结果，生成发布样式的表格。 
 
 `est_names`可以指定一个或多个估计结果，允许使用`*` `?`匹配字符，并允许使用`.`字符代指当前统计结果。不指定`est_names`时默认使用当前估计结果。  
 `fileaname`指定生成结果保存的文件名。可指定文件后缀名为`.smcl` `.txt` `.csv` `.rtf` `.html` `.tex` 和 `.md`，当`options`中未指定保存格式时默认使用文件名中指定的后缀，否则默认为`smcl`。未指定`using filename`时，不保存文件，仅将结果显示在屏幕上。    
 
 #### Labeling Options
->待施工 
-> 
-`label` 指定使用变量标签代替变量名称（并且使用估计集标题代替估计集名称）。此外，常数项标签打印`Constant`而不是`_cons`。
-`interaction(string)` 指定用作交互术语分隔符的字符串（仅在 Stata 11 或更高版本中相关）。 默认是交互（“#”）。 对于 tex 和 booktabs，默认值
-         是交互（“$\times$”）。
-
-`title(string)` 可用于提供表格的标题。 如果指定，字符串将打印在表的顶部。 请注意，指定标题会导致表格设置为浮动表格
-         LaTeX 模式下的对象（除非指定了 nofloat 选项）。 在这种情况下，您可能需要设置一个标签以供参考。 例如，如果您输入 title(...\label{tab1})，则为“\ref{tab1}”
-         可以在 LaTeX 文档中使用来指向表格。
-
-`mtitles`（不带参数）指定对于每个模型，存储的估计集的标题（或者，如果为空，则为名称）将打印为表标题中的模型标题。 如果 mtitles 是
+- `label` 指定使用变量标签代替变量名称（并且使用估计集标题代替估计集名称）。此外，常数项标签打印`Constant`而不是`_cons`。  
+- `interaction(string)` 指定用作交互术语分隔符的字符串（仅在 Stata 11 或更高版本中相关）。 默认是交互（“#”）。 对于 tex 和 booktabs，默认值是交互（“$\times$”）。
+- `title(string)` 可用于提供表格的标题。 如果指定，字符串将打印在表的顶部。   
+- `mtitles`（不带参数）指定对于每个模型，存储的估计集的标题（或者，如果为空，则为名称）将打印为表标题中的模型标题。 如果 mtitles 是
          省略，默认是使用因变量的名称或标签作为模型的标题（请参阅 depvar 选项）。 或者，使用 mtitles(list) 指定模型标题列表。
          如果标题包含空格，请将其括在双引号中，例如 mtitles(“模型 1”“模型 2”).
-
-`nomtitles` 禁止打印模型标题。
-
-`depvars` 将模型的（第一个）因变量的名称（或标签）打印为表标题中的模型标题。 这是默认设置。 指定nodepvars以使用存储的名称
+- `nomtitles` 禁止打印模型标题。
+- `depvars` 将模型的（第一个）因变量的名称（或标签）打印为表标题中的模型标题。 这是默认设置。 指定nodepvars以使用存储的名称
          估计集作为标题。
-
-`numbers` 在表标题中包含一行，其中包含连续的型号。 这是默认设置。 指定 nonumbers 以禁止打印型号。
-
-`coeflabels(name label [...])` 指定系数的标签。 成对指定名称和标签，如有必要，将标签用双引号引起来，例如 coeflabels(mpg 里程rep78
-         《维修记录》）。
-
-`notes` 在表格末尾打印注释，解释重要性符号和显示的统计数据的类型。 这是默认设置。 指定 nonotes 来抑制注释。
-addnotes(list) 可用于在表格底部添加更多文本行。 包含空格的行必须用双引号括起来，例如 addnotes("第 1 行" "第 2 行").
-
+- `numbers` 在表标题中包含一行，其中包含连续的型号。默认启用。   
+- `nonumbers` 禁止打印型号。
+- `coeflabels(name label [...])` 指定系数的标签。 成对指定名称和标签，如有必要，将标签用双引号引起来。
+- `notes` 在表格末尾打印注释，解释重要性符号和显示的统计数据的类型。默认启用。  
+- `nonotes`禁止打印注释。  
+- `addnotes(list)` 可用于在表格底部添加更多文本行。 包含空格的行必须用双引号括起来。
 #### Document Format Options
 |  Option   |     Definition      |                                                                         Remark                                                                          |
 |:---------:|:-------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|
