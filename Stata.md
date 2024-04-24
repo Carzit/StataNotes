@@ -632,6 +632,38 @@ F 统计量检验除常数之外的所有系数均为零的假设。观察到较
 
 对于参数矩阵`e(V)`，也可以使用`_b[varname`索引每个变量的对应系数。
 
+#### 回归后估计命令
+|Command| Definition|
+|:----:|:----:|
+|dfbeta| DFBETA influence statistics|
+|estat hettest| tests for heteroskedasticity|
+|estat imtest| information matrix test|
+|estat ovtest| Ramsey regression specification-error test for omitted variables|
+|estat szroeter| Szroeter’s rank test for heteroskedasticity|
+|estat vif| variance inflation factors for the independent variables|
+|estat esize| η2 and ω2 effect sizes|
+|contrast| contrasts and ANOVA-style joint tests of estimates|
+|estat ic| Akaike’s and Schwarz’s Bayesian information criteria (AIC and BIC)|
+|estat summarize| summary statistics for the estimation sample|
+|estat vce| variance–covariance matrix of the estimators (VCE)|
+|estat (svy)| postestimation statistics for survey data|
+|estimates| cataloging estimation results|
+|forecast1| dynamic forecasts and simulations|
+|hausman| Hausman’s specification test|
+|lincom| point estimates, standard errors, testing, and inference for linear combinations of coefficients|
+|linktest| link test for model specification|
+|lrtest2| likelihood-ratio test|
+|margins| marginal means, predictive margins, marginal effects, and average marginal effects|
+|marginsplot| graph the results from margins (profile plots, interaction plots, etc.)|
+|nlcom| point estimates, standard errors, testing, and inference for nonlinear combinations of coefficients|
+|predict| predictions, residuals, influence statistics, and other diagnostic measures|
+|predictnl| point estimates, standard errors, testing, and inference for generalized predictions|
+|pwcompare| pairwise comparisons of estimates|
+|suest| seemingly unrelated estimation|
+|test| Wald tests of simple and composite linear hypotheses|
+|testnl| Wald tests of nonlinear hypotheses|
+
+
 ### estimates store est_name 
 将当前估计结果存储到内存，标识符为`est_name`。  
 会自动创建`f"_est_{est_name}"样式的变量以记录该`est_name`估计模型所使用的样本（相当于`e(sample)`）。
@@ -690,7 +722,7 @@ Wald检验：`coef_list`中各变量在估计中的系数均为0。
 
 
 ## estout
->注意，外部命令，需要安装`estout`包。  
+> 注意，外部命令，需要安装`estout`包。  
 > ssc install estout, all replace 
 
 ### esttab [est_names] [using filename] [, options estout_options ]
@@ -728,3 +760,13 @@ Wald检验：`coef_list`中各变量在估计中的系数均为0。
 |   `tex`   |  生成一个 LaTeX 格式的表格。  |                                                                                                                                                         |
 |`booktabs` |  生成一个 LaTeX 格式的表格   |                                                                与 LaTeX 的 booktabs 包一起使用。                                                                |
 |   `md`    | 生成 Markdown 格式的表格。  |                    Native Markdown 没有对表格的特定支持，但 GitHub Flavored Markdown 和 MultiMarkdown 则支持。 选项 mmd 可以用作md 的同义词（在本例中默认文件后缀为“.mmd”）。                    |
+
+## mediation
+> 注意，外部命令，需要安装`mediation`包。  
+> ssc install mediation, all replace  
+
+### medeff (regress M T x) (regress Y T M x) [if] [in], treat(T) mediate(M)
+计算自变量T通过自变量M影响因变量Y的mediation effect。  
+前一个括号中填入以中介变量`M`为因变量的回归命令，前一个括号中填入以因变量`Y`为因变量的回归命令。
+- `treat()`指定处理变量。
+- `mediate()`指定中介变量。
