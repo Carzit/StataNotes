@@ -533,6 +533,27 @@
 |       rweibullph(a,b)        |  韦伯比例风险分布随机变量   |                              shape `a` and scale `b`                               | 
 |      rweibullph(a,b,g)       |  韦伯比例风险分布随机变量   |                        shape `a`, scale `b`, andlocation `g`                         |
 
+## 随机分布
+| 随机分布 |            概率密度函数 PDF(x)             | 累计分布函数 CDF(x) | 累计分布尾部 1-CDF(x)  |   逆累计分布函数ICDF(p)   |    逆累计分布尾部 ICDF(1-p)    |
+|:----:|:------------------------------------:|:-------------:|:----------------:|:------------------:|:-----------------------:|
+| 贝塔分布 |            betaden(a,b,x)            | ibeta(a,b,x)  | ibetatail(a,b,x) |  invibeta(a,b,x)   |   invibetatail(a,b,x)   |
+| 二项分布 |           binomialp(n,k,p)           | binomial(n,k,p) | binomialtail(n,k,p) | invbinomial(n,k,p) | invbinomialtail(n,k,p)  |
+| 卡方分布 |            chi2den(df, x)            | chi2(df, x) | chi2tail(df, x) | invchi2(df, x) |   invchi2tail(df, x)    |
+|  F分布   |          Fden(df1, df2, f)           |       F(df1, df2, f)       |  Ftail(df1, df2, f)  |  invF(df1, df2, f)  |  invFtail(df1, df2, f)  |
+| 非中心F分布 |          nFden(df1, df2, f)          |      nF(df1, df2, f)       | nFtail(df1, df2, f)  | invnF(df1, df2, f)  | invnFtail(df1, df2, f)  |
+|  伽马分布  |         gammaden(a, b, g, x)         |        gammap(a, x)        |   gammaptail(a, x)   |   invgammap(a, x)   |   invgammaptail(a, x)   |
+| 超几何分布  |     hypergeometricp(N, K, n, k)      | hypergeometric(N, K, n, k) |                      |                     |                         |
+| 负二项分布 |          nbinomialp(n,k,p)           |      nbinomial(n,k,p)      | nbinomialtail(n,k,p) | invnbinomial(n,k,p) | invnbinomialtail(n,k,p) |
+| 标准正态分布 |             normalden(z)             |         normal(z)          |                      |    invnormal(p)     |                         |
+| 正态分布 | normalden(x,σ)均值为1， normalden(x,μ,σ) |                            |                      |                     |                         |
+| 泊松分布 |            poissonp(m, k)            |       poisson(m, k)        |  poissontail(m, k)   |   invpoisson(m,k)   |  invpoissontail(m, k)   |
+| t分布 |             tden(df, t)              |          t(df, t)          |     ttail(df, t)     |     invt(df, t)     |     invttail(df, t)     |
+| 非中心t分布 |             ntden(df, t)             |         nt(df, t)          |    nttail(df, t)     |    invnt(df, t)     |    invnttail(df, t)     |
+
+>注：  
+>∫(0~x)PDF(t)dt = CDF(x)  
+>CDF(x) = p <-> ICDF(p) = x
+
 ## 矩阵
 ### matrix [define] mat_name = matrix expression
 矩阵表达式定义矩阵或矩阵元素的数值。
