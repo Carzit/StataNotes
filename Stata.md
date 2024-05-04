@@ -533,7 +533,7 @@
 |       rweibullph(a,b)        |  韦伯比例风险分布随机变量   |                              shape `a` and scale `b`                               | 
 |      rweibullph(a,b,g)       |  韦伯比例风险分布随机变量   |                        shape `a`, scale `b`, andlocation `g`                         |
 
-## 随机分布
+## 随机分布函数
 | 随机分布 |            概率密度函数 PDF(x)             | 累计分布函数 CDF(x) | 累计分布尾部 1-CDF(x)  |   逆累计分布函数ICDF(p)   |    逆累计分布尾部 ICDF(1-p)    |
 |:----:|:------------------------------------:|:-------------:|:----------------:|:------------------:|:-----------------------:|
 | 贝塔分布 |            betaden(a,b,x)            | ibeta(a,b,x)  | ibetatail(a,b,x) |  invibeta(a,b,x)   |   invibetatail(a,b,x)   |
@@ -577,6 +577,69 @@
 `#row`,`#col`从`1`开始计数。允许使用单个数字`#`、对应行名或列名、切片`[#..#]` `[...#]` `[#...]`。
 矩阵创建时默认行名为`r1`,`r2`,...，默认列名为`c1`,`c2`,...
 
+## 命令与程序
+
+### program [define] program_name [, class byable() properties(namelist)]
+定义程序。  
+
+- `class`声明返回类型。可选取`nclass`,`rclass`,`eclass`或`sclass`。`nclass`声明所定义的程序不会在 `r()`、`e()` 或 `s()` 中返回结果，默认。`rclass`声明所定义的程序在 `r()` 中返回结果。这是使用 `return` 命令完成的。`eclass` 声明所定义的程序返回 `e()` 中的结果或修改 `e()` 中已有的结果。这是使用 `ereturn` 命令完成的。 `sclass` 声明所定义的程序返回 `s()` 中的结果。这是使用 `sreturn` 命令完成的。 如果程序没有显式声明对应`class`，则它可能无法直接修改对应结果类型。
+- `byable()`允许使用程序执行语句添加`by varlilst`前缀。可选用byable(recall)或byable(onecall)。
+- `properties`使用资源？
+
+>使用`program`实现函数编写
+> 
+>       program myweirdexample 
+>           version 13 
+>           syntax varlist(numeric), Generate(namelist) 
+>
+>           local nold : word count `varlist'
+>           local nnew : word count `generate' 
+>           if `nold' != `nnew' { 
+>               display as err "`generate' does not match `varlist'" 
+>               exit 198 
+>           }
+>
+>           local i = 1 
+>           quietly foreach v of local varlist { 
+>               local new : word `i' of `generate' 
+>               gen `new' = 0.5 * `v' if `v' == 1 
+>               replace `new' = 31 - `v' if `v' == 2 
+>               replace `new' = `v' - 2 if `v' == 3             
+>               local ++i 
+>           }
+>       end
+
+
+
+### program dir
+显示内存中的所有程序名称。  
+
+### program drop program_names
+删除程序。  
+
+### program list [program_names]
+显示程序的详细定义。
+
+### return list [, all]
+### return clear
+### return scalar name = exp
+### return local name = exp
+### return local name ["]string["]
+### return matrix name [=] matname [, copy]
+### return add
+
+> 区分 r()（返回结果）和 return()（正在组装将返回的结果）。
+> 程序(programe)实际上将结果存储在 return() 中。然后，当程序完成时，return() 中的所有内容都会复制到 r() 中。因此，您编写的程序可以使用其他程序的 r() 结果，并且不存在冲突。
+
+### capture [:] command
+capture 执行命令，抑制其所有输出（包括错误消息，如果有）并发出返回码零。命令生成的实际返回代码存储在内置标量`rc`中。   
+capture 可以与 {} 结合生成捕获块，抑制命令块的输出。  
+
+### simulate [exp_list], reps(#) [options] : command
+
+
+### 
+
 ## OLS回归
 
 ### regress dep_varname [indep_varlist] [if] [in] [weight] [, noconstant vce(vcetype) level(#)] 
@@ -604,7 +667,7 @@
 生成各种汇总统计数据以及回归系数表。   
 
 在左上角，回归报告了方差分析 (ANOVA) 表。  
-列标题 `SS`、`df` 和 `MS` 分别代表`平方和`、`自由度`和`均方`（即平方和除以自由度）。`模型平方和`相当于`SSR=∑(y_hat - E(y))^2`，`残差平方和`相当于`SSE=∑(y-y_hat)^2`.  
+列标题 `SS`、`df` 和 `MS` 分别代表`平方和`、`自由度`和`均方`（即平方和除以自由度）。`模型平方和`相当于`SSE=∑(y_hat - E(y))^2`，`残差平方和`相当于`SSR=∑(y-y_hat)^2`，两者相加的`Total`即为 `SST=∑(y-E(y))^2`。
 > 在此示例中，总平方和为 2,443.5：模型占了 1,619.3，还有 824.2 未解释。由于回归包含一个常数，因此总和反映了去除均值后的总和，模型的平方和也是如此。该表还显示，总共有 73 个自由度（计算为 74 个观测值减去平均去除的 1 个），其中 2 个被模型消耗，剩下 71 个为残差。
 
 方差分析表的右侧显示了其他汇总统计数据。
