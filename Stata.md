@@ -774,11 +774,11 @@ F 统计量检验除常数之外的所有系数均为零的假设。观察到较
 单一样本t检验，测试`varname`的均值是否为`#`
 - `level()`置信水平。默认为 `level(95)`。
 
-### ttest varname1==varname1 [if] [in] , unpair [unequal level(#)]
+### ttest varname1==varname2 [if] [in] , unpair [unequal level(#)]
 独立样本t检验，测试`varname1`的均值是否等于`varname2`
 - `level()`置信水平。默认为 `level(95)`。
 
-### ttest varname1==varname1 [if] [in] [ level(#)]
+### ttest varname1==varname2 [if] [in] [ level(#)]
 配对样本t检验，测试按顺序配对的每个`varname1 - varname2`元素的均值是否为`0`
 - `level()`置信水平。默认为 `level(95)`。
 
